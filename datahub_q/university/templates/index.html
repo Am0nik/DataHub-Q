@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Университеты РК</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+
+<header>
+    <h1>Университеты РК</h1>
+</header>
+
+<main class="cards-container">
+
+    {% for university in universities %}
+        <a class="card" href="{% url 'university_detail' university.id %}">
+            {% if university.main_image %}
+                <img src="{{ university.main_image.url }}" alt="{{ university.title }}" width="80%" height="auto" style="border-radius: 15px;">
+            {% endif %}
+            <h2>{{ university.title }}</h2>
+            <div style="line-height: 0.5;">
+                {% for ranking in university.rankings.all %}
+                    <p style="color: rgb(203, 228, 207);">
+                        Рейтинг по <i>{{ ranking.system }} {{ ranking.year }}</i>: 
+                        <b>
+                            {% if ranking.rank_to %}
+                                {{ ranking.rank_from }}-{{ ranking.rank_to }}
+                            {% else %}
+                                {{ ranking.rank_from }}
+                            {% endif %}
+                        </b>
+                    </p>
+                {% endfor %}
+            </div>
+        </a>
+    {% empty %}
+        <p>Университеты не найдены.</p>
+    {% endfor %}
+
+
+</main>
+
+</body>
+</html>

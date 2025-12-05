@@ -1,0 +1,8 @@
+from django.urls import path
+from . import views
+from django.conf import settings
+from django.conf.urls.static import static#для работы с медиа из статических файлов
+
+urlpatterns = [
+    path('<int:pk>/', views.university_detail, name='university_detail'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)#поключение медиа статических файлов

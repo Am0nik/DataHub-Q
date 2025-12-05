@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ university.title }}</title>
+    <link rel="stylesheet" href="{% static 'styles_about.css' %}">
+</head>
+<body>
+
+<header>
+    <h1>{{ university.title }}</h1>
+</header>
+
+{% if university.main_image %}
+    <img class="main-image" src="{{ university.main_image.url }}" alt="{{ university.title }}">
+{% endif %}
+
+<!-- меню якорей -->
+<div class="nav-sections">
+    <ul>
+        <li><a href="#about">Об университете</a></li>
+        <li><a href="#tour">3D-тур</a></li>
+        <li><a href="#programs">Академ. программы</a></li>
+        <li><a href="#admission">Приём и поступление</a></li>
+        <li><a href="#international">Международное сотрудничество</a></li>
+        <li><a href="#photos">Фотографии</a></li>
+    </ul>
+</div>
+
+<!-- разделы -->
+<main>
+    <div class="section" id="about">
+        <h2>Об университете</h2>
+        <p>{{ university.description|safe }}</p>
+    </div>
+
+    <div class="section" id="tour">
+        <h2>3D-тур</h2>
+        <iframe src="{{ university.d_tour }}" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <div class="section" id="programs" style="text-align: center;">
+        <h2>Академические программы</h2>
+        <p>Программы бакалавриата, магистратуры и докторантуры, предлагаемые университетом:</p>
+    
+        <div class="programs-list" >
+            {% for program in university.programs.all %}
+            <div class="program-card">
+                <h3>{{ program.name }}</h3>
+                <hr>
+                <p>Факультет: <b>{{ program.faculty }}</b></p>
+                {% if program.passing_score %}
+                <p>Проходной балл: <b>{{ program.passing_score }}</b></p>
+                {% endif %}
+                <p>Код программы: <b>{{ program.code }}</b></p>
+                {% if program.description %}
+                <a href="{{ program.link }}" class="btn">Подробнее</a>
+                {% endif %}
+            </div>
+            {% empty %}
+                <p>Программы пока не добавлены.</p>
+            {% endfor %}
+        </div>
+        <h3>Полный список программ <i><a href="{{ university.programs_link }}" style="font-weight: 600;color:#FFB800">тут</a></i></h3>
+    </div>
+
+
+
+    <div class="section" id="admission">
+        <h2>Приём и поступление</h2>
+        <p>{{ university.admission|safe }}</p>
+    </div>
+
+    <div class="section" id="international">
+        <h2>Международное сотрудничество</h2>
+        <p>Программы обмена, партнерские университеты и возможности для иностранных студентов.</p>
+        <hr>
+        <p>{{ university.international_cooperation|safe }}</p>
+    </div>
+
+    <!-- Галерея изображений -->
+    {% if university.gallery_images.all %}
+    <div class="gallery" id="photos">
+        {% for image in university.gallery_images.all %}
+            <div class="gallery-item">
+                <img src="{{ image.image.url }}" alt="{{ image.caption }}">
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</main>
+<a href="{% url 'index' %}" class="back-link">
+    ➜
+</a>
+<footer>
+    <p>Команда: AIronic</p>
+</footer>
+</body>
+</html>
