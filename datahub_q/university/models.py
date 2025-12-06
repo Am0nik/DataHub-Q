@@ -24,7 +24,12 @@ class University(models.Model):
     admission = RichTextField(verbose_name="Информация о поступлении", blank=True, null=True)
     international_cooperation = RichTextField(verbose_name="Международное сотрудничество", blank=True, null=True)
     d_tour = models.URLField(verbose_name="Ссылка на 3D-тур по университету", blank=True, null=True)
-
+    city = models.CharField(max_length=255, verbose_name="Город", blank=True, null=True)
+    specializations = models.PositiveIntegerField(verbose_name="Количество образовательных программ", blank=True, null=True)
+    stipends_bk = models.PositiveIntegerField(verbose_name="Размер стипендии баклавра", blank=True, null=True)
+    stipends_mg = models.PositiveIntegerField(verbose_name="Размер стипендии магистра", blank=True, null=True)
+    stipends_doc = models.PositiveIntegerField(verbose_name="Стоимость стипендии доктора", blank=True, null=True)
+    
     # связь с разделами университета
     sections = models.ManyToManyField(
         UniversitySection,

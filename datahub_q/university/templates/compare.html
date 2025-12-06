@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сравнение университетов</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        .best { background-color: #d4edda; } /* зелёный фон для лучшего */
+    </style>
+</head>
+<header>
+    <h1>Сравнить университеты</h1>
+</header>
+<body>
+<main>
+    <table>
+        <thead>
+            <tr>
+                <th>Параметр</th>
+                <th>{{ university1.title }}</th>
+                <th>{{ university2.title }}</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center;">
+
+            {% if university1.city or university2.city %}
+            <tr style="color: var(--forest);">
+                <td data-label="Параметр">Город</td>
+                <td data-label="{{ university1.title }}">{{ university1.city }}</td>
+                <td data-label="{{ university2.title }}">{{ university2.city }}</td>
+            </tr>
+            {% endif %}
+
+            {% if specialties_count1 or specialties_count2 %}
+            <tr style="color: var(--forest);">
+                <td data-label="Параметр">Количество образовательных программ</td>
+                <td data-label="{{ university1.title }}" 
+                    class="{% if specialties_count1|default:0 >= specialties_count2|default:0 %}best{% endif %}">
+                    {{ specialties_count1|default:"-" }}
+                </td>
+                <td data-label="{{ university2.title }}" 
+                    class="{% if specialties_count2|default:0 > specialties_count1|default:0 %}best{% endif %}">
+                    {{ specialties_count2|default:"-" }}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if qs_asia_1_from or qs_asia_1_to or qs_asia_2_from or qs_asia_2_to %}
+            <tr style="color: var(--forest);">
+                <td data-label="Параметр">Рейтинг QS Asia</td>
+                <td data-label="{{ university1.title }}"
+                    class="{% if qs_asia_1_from and qs_asia_2_from and qs_asia_1_from < qs_asia_2_from %}best{% endif %}">
+                    {% if qs_asia_1_from and qs_asia_1_to %}
+                        {{ qs_asia_1_from }} - {{ qs_asia_1_to }}
+                    {% elif qs_asia_1_from %}
+                        {{ qs_asia_1_from }}
+                    {% elif qs_asia_1_to %}
+                        {{ qs_asia_1_to }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td data-label="{{ university2.title }}"
+                    class="{% if qs_asia_1_from and qs_asia_2_from and qs_asia_2_from < qs_asia_1_from %}best{% endif %}">
+                    {% if qs_asia_2_from and qs_asia_2_to %}
+                        {{ qs_asia_2_from }} - {{ qs_asia_2_to }}
+                    {% elif qs_asia_2_from %}
+                        {{ qs_asia_2_from }}
+                    {% elif qs_asia_2_to %}
+                        {{ qs_asia_2_to }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if qs_world_1_from or qs_world_1_to or qs_world_2_from or qs_world_2_to %}
+            <tr style="color: var(--forest);">
+                <td data-label="Параметр">Рейтинг QS World</td>
+                <td data-label="{{ university1.title }}"
+                    class="{% if qs_world_1_from and qs_world_2_from and qs_world_1_from < qs_world_2_from %}best{% endif %}">
+                    {% if qs_world_1_from and qs_world_1_to %}
+                        {{ qs_world_1_from }} - {{ qs_world_1_to }}
+                    {% elif qs_world_1_from %}
+                        {{ qs_world_1_from }}
+                    {% elif qs_world_1_to %}
+                        {{ qs_world_1_to }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td data-label="{{ university2.title }}"
+                    class="{% if qs_world_1_from and qs_world_2_from and qs_world_2_from < qs_world_1_from %}best{% endif %}">
+                    {% if qs_world_2_from and qs_world_2_to %}
+                        {{ qs_world_2_from }} - {{ qs_world_2_to }}
+                    {% elif qs_world_2_from %}
+                        {{ qs_world_2_from }}
+                    {% elif qs_world_2_to %}
+                        {{ qs_world_2_to }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+
+            {% if stipends_bk1 or stipends_mg1 or stipends_doc1 or stipends_bk2 or stipends_mg2 or stipends_doc2 %}
+            <tr style="color: var(--forest);">
+                <td data-label="Параметр">Стипендии (бакалавр / магистр / доктор)</td>
+                <td data-label="{{ university1.title }}">
+                    {{ stipends_bk1|default:"-" }}₸ / {{ stipends_mg1|default:"-" }}₸ / {{ stipends_doc1|default:"-" }}₸
+                </td>
+                <td data-label="{{ university2.title }}">
+                    {{ stipends_bk2|default:"-" }}₸ / {{ stipends_mg2|default:"-" }}₸ / {{ stipends_doc2|default:"-" }}₸
+                </td>
+            </tr>
+            {% endif %}
+
+        </tbody>
+    </table>
+    <br><br><br>
+</main>
+<a href="{% url 'compare_list' %}" class="back-link">➜</a>
+</body>
+</html>
