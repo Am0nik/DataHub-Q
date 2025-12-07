@@ -83,38 +83,54 @@
     <!-- галерея изображений -->
     {% if university.gallery_images.all %}
     <div class="gallery" id="photos">
-        {% for image in university.gallery_images.all %}
-            <div class="gallery-item">
-                <img src="{{ image.image.url }}" alt="{{ image.caption }}">
-            </div>
-        {% endfor %}
+        <button class="prev">&#10094;</button>
+
+        <div class="gallery-wrapper">
+            {% for image in university.gallery_images.all %}
+                <img src="{{ image.image.url }}">
+            {% endfor %}
+        </div>
+
+        <button class="next">&#10095;</button>
     </div>
     {% endif %}
-    <div class="comments-section">
-        <h2>Комментарии</h2>
-        
-        <form method="post" class="comment-form">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Отправить</button>
-        </form>
 
-        <div class="comments-list">
+    <div class="comments-section" id="comments">
+    <h2>Комментарии</h2>
+    
+    <form method="post" class="comment-form">
+        {% csrf_token %}
+
+        <div class="form-field">
+            <label for="id_nickname">Ник:</label>
+            <input type="text" name="nickname" id="id_nickname" placeholder="Ваш ник" required>
+        </div>
+
+        <div class="form-field">
+            <label for="id_text">Сообщение:</label>
+            <textarea name="text" id="id_text" rows="3" placeholder="Ваш комментарий" required></textarea>
+        </div>
+
+        <button class="comment-btn" type="submit">Отправить</button>
+    </form>
+
+    <div class="comments-list">
+        {% if comments %}
             {% for comment in comments %}
                 <div class="comment-card">
                     <div class="comment-header">
-                        <strong>{{ comment.nickname }}</strong>
-                        <span class="comment-time">{{ comment.created_at|date:"d.m.Y H:i" }}</span>
+                        <span class="comment-author">{{ comment.nickname }}</span>
+                        <span class="comment-date">{{ comment.created_at|date:"d.m.Y H:i" }}</span>
                     </div>
-                    <div class="comment-text">
-                        {{ comment.text }}
-                    </div>
+                    <p class="comment-text">{{ comment.text }}</p>
                 </div>
-            {% empty %}
-                <p class="no-comments">Комментариев пока нет.</p>
             {% endfor %}
-        </div>
+        {% else %}
+            <p class="no-comments">Комментариев пока нет.</p>
+        {% endif %}
     </div>
+</div>
+
 
 </main>
 <a href="{% url 'index' %}" class="back-link">
@@ -123,5 +139,21 @@
 <footer>
     <p>Команда: AIronic</p>
 </footer>
+<script>
+    const wrapper = document.querySelector(".gallery-wrapper");
+const images = document.querySelectorAll(".gallery-wrapper img");
+let index = 0;
+
+document.querySelector(".next").onclick = () => {
+    index = (index + 1) % images.length;
+    wrapper.style.transform = `translateX(-${index * 100}%)`;
+};
+
+document.querySelector(".prev").onclick = () => {
+    index = (index - 1 + images.length) % images.length;
+    wrapper.style.transform = `translateX(-${index * 100}%)`;
+};
+
+</script>
 </body>
 </html>

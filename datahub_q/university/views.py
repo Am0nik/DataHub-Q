@@ -35,11 +35,16 @@ from django.db.models import Q
 
 def compare_list(request):
     query = request.GET.get('q', '').strip()
+    sort_order = request.GET.get('sort', 'asc')  # получаем порядок сортировки
+
+    universities = University.objects.all()
     if query:
-        # поиск по подстроке без учёта регистра через Q и __icontains
-        universities = University.objects.filter(title__icontains=query)
+        universities = universities.filter(title__icontains=query)
+
+    if sort_order == 'asc':
+        universities = universities.order_by('title')
     else:
-        universities = University.objects.all()
+        universities = universities.order_by('-title')
 
     paginator = Paginator(universities, 6)
     page_number = request.GET.get('page')
@@ -71,7 +76,8 @@ def compare_list(request):
     return render(request, 'compare_list.html', {
         'universities': page_obj.object_list,
         'page_obj': page_obj,
-        'selected': selected
+        'selected': selected,
+        'sort_order': sort_order
     })
 
 
@@ -115,7 +121,7 @@ def compare_universities(request, pk1, pk2):
 
 
 
-GEMINI_API_KEY = "AIzaSyAgcmOOdnAQARERPBgELbFJX55ci_dZtZA"
+GEMINI_API_KEY = "AIzaSyDGRnYRhYPJwMWfSctFJRkHArr1gP_KTcg"
 genai.configure(api_key=GEMINI_API_KEY)
 
 def chat_with_ai(request):

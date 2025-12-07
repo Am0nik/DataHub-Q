@@ -8,65 +8,74 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-<header style="margin-bottom: 20px;">
+<header>
     <h1>Сравнение университетов</h1>
 </header>
 
 <main>
-    <!-- поиск -->
-    <form method="get" class="search-box">
-        <input type="text" name="q" placeholder="Поиск университета..." value="{{ request.GET.q }}">
-        <button type="submit">Найти</button>
-    </form>
+    <!-- поиск и сортировка -->
+<div class="selection-container" style="background-color:#072d3d;">
+<form method="get" class="search-sort-box">
+    <input type="text" name="q" placeholder="Поиск университета..." value="{{ request.GET.q }}">
+    <select name="sort">
+        <option value="asc" {% if request.GET.sort == "asc" %}selected{% endif %}>Название А–Я</option>
+        <option value="desc" {% if request.GET.sort == "desc" %}selected{% endif %}>Название Я–А</option>
+    </select>
+    <button type="submit">Применить</button>
+</form>
 
     <form method="post" action="{% url 'compare_list' %}" id="compare-form">
-        {% csrf_token %}
+    {% csrf_token %}
+    
+    <!-- выбранные для сравнения -->
         {% if error %}
-            <p style="color:red;text-align: center;">{{ error }}</p>
+            <p class="error-message">{{ error }}</p>
         {% endif %}
-
-        <div id="selection-info" style="text-align:center; margin:10px 0;">
+        <div class="selection-info">
             Выбрано: <span id="selected-count">0</span>/2
         </div>
-
         <div id="hidden-selected-inputs"></div>
+</div>
 
-        {% if universities %}
-            {% for university in universities %}
-                <div class="university-card">
-                    <input type="checkbox" class="uni-checkbox" name="selected_universities"
-                           value="{{ university.id }}" id="uni{{ university.id }}">
-                    <div>
-                        <label for="uni{{ university.id }}">{{ university.title }}</label>
-                        <p>Город: {{ university.city }}</p>
-                    </div>
-                </div>
-            {% endfor %}
-
-            <!--пагинация -->
-            {% if page_obj %}
-                <div class="pagination">
-                    {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Назад</a>
-                    {% endif %}
-
-                    <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Вперёд</a>
-                    {% endif %}
-                </div>
-            {% endif %}
-
-            <div class="compare-section">
-                <button type="submit" disabled>Сравнить выбранные</button>
+    <!-- список университетов -->
+    {% if universities %}
+    <div class="universities-list">
+        {% for university in universities %}
+        <div class="university-card">
+            <input type="checkbox" class="uni-checkbox" name="selected_universities"
+                   value="{{ university.id }}" id="uni{{ university.id }}">
+            <div class="uni-info">
+                <label for="uni{{ university.id }}">{{ university.title }}</label>
+                <p>Город: {{ university.city }}</p>
             </div>
-        {% else %}
-            <p style="text-align: center;">Университеты не найдены</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- пагинация -->
+    {% if page_obj %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Назад</a>
         {% endif %}
-    </form>
+        <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Вперёд</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="compare-section">
+        <button type="submit" disabled>Сравнить выбранные</button>
+    </div>
+    {% else %}
+        <p class="empty-message">Университеты не найдены</p>
+    {% endif %}
+</form>
+
 </main>
-<br><br><br><br><br>
+<br>
+<br><br><br><br>
 <a href="{% url 'index' %}" class="back-link">➜</a>
 
 <script>
@@ -77,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const compareBtn = document.querySelector('.compare-section button[type="submit"]');
 
     let selected = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-
     const checkboxes = Array.from(document.querySelectorAll('.uni-checkbox'));
 
     checkboxes.forEach(cb => {
@@ -110,13 +118,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('compare-form');
     form.addEventListener('submit', function (e) {
         hiddenContainer.innerHTML = '';
-
         if (selected.length !== 2) {
             e.preventDefault();
             alert('Пожалуйста, выберите ровно 2 университета для сравнения.');
             return false;
         }
-
         selected.forEach(id => {
             const input = document.createElement('input');
             input.type = 'hidden';
@@ -124,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function () {
             input.value = id;
             hiddenContainer.appendChild(input);
         });
-
         localStorage.removeItem(STORAGE_KEY);
     });
 });

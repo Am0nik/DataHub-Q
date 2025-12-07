@@ -7,102 +7,204 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* Контейнер чата */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+        /* ===== Общие стили ===== */
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a1f2c;
+            color: #ffffff;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: linear-gradient(90deg, #04202c, #304040);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+            text-align: center;
+            flex: 1;
+        }
+
+        header a {
+            text-decoration: none;
+            color: #c9d1c8;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        header a:hover {
+            background-color: #5b7065;
+            color: #fff;
+        }
+
+        h2.subtitle {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: 500;
+            color: #c9d1c8;
+        }
+
+        /* ===== Контейнер чата ===== */
         .chat-container {
             display: flex;
             flex-direction: column;
             width: 95%;
-            max-width: 85%;
-            height: 90vh;
-            margin: 10px auto;
+            max-width: 900px;
+            height: 70vh;
+            margin: 0 auto 40px auto;
             background-color: #04202c;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            font-family: Arial, sans-serif;
+            box-shadow: 0 0 20px rgba(0,0,0,0.6);
         }
 
-        /* Область сообщений */
         .chat-messages {
             flex: 1;
-            padding: 10px;
+            padding: 15px;
             overflow-y: auto;
-            background-color: #304040;
             display: flex;
-            width: 100%;
             flex-direction: column;
+            gap: 10px;
+            background-color: #1f3a3f;
+            scrollbar-width: thin;
+            scrollbar-color: #5b7065 #1f3a3f;
         }
 
-        /* Сообщение */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: #5b7065;
+            border-radius: 4px;
+        }
+
         .message {
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 15px;
+            padding: 12px 18px;
+            border-radius: 20px;
             max-width: 70%;
             word-wrap: break-word;
             font-size: 16px;
-            line-height: 1.4;
+            line-height: 1.5;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
         }
 
         .message.user {
             background-color: #c9d1c8;
             color: #04202c;
-            align-self: flex-end; 
+            align-self: flex-end;
             text-align: right;
-            border-bottom-right-radius: 0;
+            border-bottom-right-radius: 5px;
         }
 
         .message.ai {
             background-color: #5b7065;
-            color: #FFFFFF;
+            color: #ffffff;
             align-self: flex-start;
             text-align: left;
-            border-bottom-left-radius: 0;
+            border-bottom-left-radius: 5px;
         }
 
         .chat-input-form {
             display: flex;
-            border-top: 1px solid #c9d1c8;
-            background-color: #304040;
+            border-top: 1px solid #5b7065;
+            background-color: #1f3a3f;
         }
 
         .chat-input-form input {
             flex: 1;
-            padding: 10px;
+            padding: 15px;
             border: none;
             outline: none;
             font-size: 16px;
+            background-color: #1f3a3f;
+            color: #ffffff;
+            transition: background 0.3s;
+        }
+
+        .chat-input-form input:focus {
             background-color: #304040;
-            color: #FFFFFF;
         }
 
         .chat-input-form button {
-            padding: 10px 15px;
+            padding: 0 25px;
             border: none;
-            background-color: #c9d1c8;
-            color: #04202c;
-            font-weight: bold;
-            width: 150px;
-            font-size: 1.2em;
+            background-color: #5b7065;
+            color: #c5d8fa;
+            font-weight: 600;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: 0.3s;
         }
 
         .chat-input-form button:hover {
-            background-color: #5b7065;
-            color: #FFFFFF;
+            background-color: #d79232;
+            color: #caebf9;
         }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            color: #c9d1c8;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: #ffffff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #c9d1c8;
+            background-color: #04202c;
+            border-top: 1px solid #5b7065;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 60vh;
+            }
+
+            header h1 {
+                font-size: 1.6em;
+            }
+
+            .chat-input-form input {
+                font-size: 14px;
+            }
+
+            .chat-input-form button {
+                font-size: 14px;
+                padding: 0 15px;
+            }
+        }
+
     </style>
 </head>
 <body>
     <header>
-        <a href="{% url 'chat_with_ai' %}"><h2>Помощь ИИ</h2></a>
+        <a href="{% url 'chat_with_ai' %}">Помощь ИИ</a>
         <h1>Университеты РК</h1>
-        <a href="{% url 'compare_list' %}"><h2>Сравнить университеты</h2></a>
+        <a href="{% url 'compare_list' %}">Сравнить университеты</a>
     </header>
-    <div>
-        <h2 style="text-align: center; margin-top: 10px;">Чат с ИИ, он поможет Вам выбрать лучший для вас ВУЗ</h2>
-    </div>
+
+    <h2 class="subtitle">Чат с ИИ поможет Вам выбрать лучший ВУЗ</h2>
+
     <div class="chat-container">
         <div class="chat-messages" id="chatMessages"></div>
 
@@ -112,53 +214,57 @@
         </form>
     </div>
 
-<a href="{% url 'index' %}" class="back-link">
-    ➜
-</a>
-    <script>
-        $('#chatForm').submit(function(e) {
-            e.preventDefault();
+    <a href="{% url 'index' %}" class="back-link" style="color: #04202c;">➜</a>
 
-            let userMessage = $('#messageInput').val().trim();
-            if (!userMessage) return;
-
-            // Добавляем сообщение пользователя
-            $('#chatMessages').append("<div class='message user'>" + userMessage + "</div>");
-
-            // Отправляем на сервер
-            $.ajax({
-                url: "/university/chat/api/",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ message: userMessage }),
-                success: function(data) {
-                    let reply = data.response || data.message || JSON.stringify(data);
-                    // Добавляем сообщение ИИ
-                    $('#chatMessages').append("<div class='message ai'>" + reply + "</div>");
-                    // Автопрокрутка вниз
-                    $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
-                },
-                error: function(xhr) {
-                    $('#chatMessages').append("<div class='message ai error'>Ошибка: " + xhr.responseText + "</div>");
-                }
-            });
-
-            // Очистка поля ввода
-            $('#messageInput').val('');
-        });
-        document.querySelectorAll("a").forEach(link => {
-            link.addEventListener("click", function(e) {
-                const confirmExit = confirm("Вы действительно хотите уйти? История общения с ИИ не сохранится!");
-                if (!confirmExit) {
-                    e.preventDefault();
-                }
-            });
-        });
-
-
-    </script>
     <footer>
-    <p>Команда: AIronic</p>
-</footer>
+        <p>Команда: AIronic</p>
+    </footer>
+
+    <script>
+    $('#chatForm').submit(function(e) {
+        e.preventDefault();
+
+        let userMessage = $('#messageInput').val().trim();
+        if (!userMessage) return;
+
+        let userDiv = document.createElement('div');
+        userDiv.className = 'message user';
+        userDiv.textContent = userMessage; // безопасно
+        document.getElementById('chatMessages').appendChild(userDiv);
+
+        $.ajax({
+            url: "/university/chat/api/",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ message: userMessage }),
+            success: function(data) {
+                let reply = data.response || data.message || JSON.stringify(data);
+                let aiDiv = document.createElement('div');
+                aiDiv.className = 'message ai';
+                aiDiv.innerHTML = reply; // если на сервере уже безопасно обработано, можно |safe
+                document.getElementById('chatMessages').appendChild(aiDiv);
+
+                $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
+            },
+            error: function(xhr) {
+                let errDiv = document.createElement('div');
+                errDiv.className = 'message ai error';
+                errDiv.textContent = "Ошибка: " + xhr.responseText;
+                document.getElementById('chatMessages').appendChild(errDiv);
+            }
+        });
+
+        $('#messageInput').val('');
+    });
+
+    // Предупреждение при уходе со страницы
+    document.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function(e) {
+            const confirmExit = confirm("Вы действительно хотите уйти? История общения с ИИ не сохранится!");
+            if (!confirmExit) e.preventDefault();
+        });
+    });
+</script>
+
 </body>
 </html>

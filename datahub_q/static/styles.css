@@ -23,32 +23,34 @@ body {
 }
 
 header {
-    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 50px;
-    background-color: #304040;
-    color: #c9d1c8;
+    padding: 20px 40px;
+    background: linear-gradient(90deg, #04202c, #304040);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 header h1 {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     margin: 0;
-    color: #f9fff8;
-    font-size: 2.5em;
+    font-size: 2em;
+    text-align: center;
+    flex: 1;
 }
 
 header a {
-    margin: 0;
+    text-decoration: none;
     color: #c9d1c8;
-    text-decoration-color: var(--mist);
-    font-weight: normal;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: 0.3s;
 }
 
-
+header a:hover {
+    background-color: #5b7065;
+    color: #fff;
+}
 .cards-container {
     display: flex;
     justify-content: space-evenly;
@@ -203,88 +205,122 @@ footer{
     margin-top: 30px;
 }
 
-.search-box {
+/* Форма поиска и сортировки в строку */
+.search-sort-box {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
-    gap: 10px;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
 }
 
-.search-box input[type="text"] {
-    padding: 8px 12px;
-    font-size: 16px;
-    width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.search-box button {
-    padding: 8px 16px;
-    font-size: 16px;
-    background-color: #304040;
-    color: white;
+.search-sort-box input[type="text"],
+.search-sort-box select,
+.search-sort-box button {
+    padding: 10px 12px;
+    border-radius: 6px;
     border: none;
-    border-radius: 4px;
+    font-size: 16px;
+}
+
+.search-sort-box input[type="text"] {
+    width: 250px;
+}
+
+.search-sort-box button {
+    background-color: var(--pine);
+    color: var(--white);
     cursor: pointer;
+    transition: 0.3s;
 }
 
-.search-box button:hover {
-    background-color: #5b7065;
+.search-sort-box button:hover {
+    background-color: var(--evergreen);
 }
 
-.university-card {
-    background-color: #fff;
-    padding: 15px 20px;
-    margin: 10px auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+/* Список университетов в столбик */
+.universities-list {
+    display: flex;
+    flex-direction: column; /* строго сверху вниз */
+    gap: 15px;
+    width: 100%;
     max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Карточки университетов */
+.university-card {
     display: flex;
     align-items: center;
     gap: 15px;
+    padding: 15px 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
 .university-card label {
     font-weight: bold;
-    margin-right: 10px;
-    color:var(--forest);
+    color: var(--forest);
+    margin-bottom: 5px;
 }
 
 .university-card p {
     margin: 0;
-    color: var(--evergreen);
     font-size: 14px;
+    color: var(--evergreen);
 }
 
+/* Контейнер выбранных университетов */
+.selection-info {
+    font-size: 1.1em;
+    font-weight: 600;
+    background-color: #5b7065; 
+    padding: 8px 15px;
+    border-radius: 20px;
+    color: #f9fff8;
+    display: inline-block;
+    min-width: 120px;
+}
+
+.error-message {
+    color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.2);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Кнопка сравнения */
 .compare-section {
     display: flex;
-    position: fixed;
     justify-content: center;
-    gap: 10px;
-    bottom: 0px;
-    left: 50%;
+    position: fixed;
+    padding: 35px;
+    backdrop-filter: blur(10px);
+    bottom: 0;
+    left:50%;
     width: 100%;
-    padding: 40px 0;
-    transform: translateX(-50%); 
-    margin-top: 20px; 
-    backdrop-filter: blur(7px);
-    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-50%);
 }
-
 
 .compare-section button {
-    padding: 8px 16px;
+    padding: 10px 20px;
     font-size: 16px;
-    background-color: #304040;
-    color: white;
+    background-color: var(--pine);
+    color: var(--white);
+    border-radius: 8px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    margin: 0 auto;
+    transition: 0.3s;
 }
 
-.compare-section button:hover {
-    background-color: #5b7065;
+.compare-section button:hover:enabled {
+    background-color: var(--evergreen);
 }
 
 .pagination {
@@ -327,7 +363,7 @@ br{
     flex-direction: column;
     width: 95%;
     max-width: 800px; 
-    height: 90vh;
+    height: 70vh;
     margin: 10px auto 0 auto;
     background-color: #04202c;
     border-radius: 10px;
@@ -416,7 +452,209 @@ br{
     background-color: #304040;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;700&display=swap');
 
+/* ПАЛИТРА */
+:root {
+    --forest: #04202c;
+    --evergreen: #304040;
+    --pine: #5b7065;
+    --mist: #c9d1c8;
+    --white: #ffffff;
+    --highlight: #ffaa50;
+}
+
+/* ОСНОВА */
+body {
+    margin: 0;
+    font-family: "Cuprum", sans-serif;
+    background-color: var(--forest);
+    color: var(--mist);
+}
+
+/* ХЕДЕР */
+.top-header {
+    background: var(--evergreen);
+    padding: 25px 40px;
+    text-align: center;
+    position: relative;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+
+.nav-links {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 25px;
+}
+
+.nav-item {
+    color: var(--mist);
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.nav-item:hover {
+    color: var(--highlight);
+}
+
+.title {
+    font-size: 2.6em;
+    color: var(--white);
+    margin: 0;
+}
+
+/* КАРТОЧКИ */
+.cards-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 35px;
+    padding: 50px 20px;
+}
+
+.card {
+    width: 330px;
+    background: var(--pine);
+    border-radius: 16px;
+    padding: 20px;
+    text-decoration: none;
+    color: var(--white);
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    transition: 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 12px 22px rgba(0,0,0,0.35);
+}
+
+/* Фото */
+.image-wrapper {
+    width: 100%;
+    height: 190px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-title {
+    margin: 10px 0 15px;
+    font-size: 1.4em;
+}
+
+/* Рейтинги */
+.ranking-list p {
+    margin: 4px 0;
+    font-size: 0.95em;
+    color: #e8f5e9;
+}
+
+.empty-message {
+    font-size: 1.3em;
+    margin-top: 40px;
+    opacity: 0.8;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: var(--evergreen);
+    color: var(--mist);
+    margin-top: 40px;
+}
+
+
+.universities-list {
+    display: flex;
+    flex-direction: column; /* вертикально сверху вниз */
+    gap: 15px; /* расстояние между карточками */
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.university-card {
+    display: flex;
+    align-items: center; /* содержимое горизонтально внутри карточки */
+    padding: 15px 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.university-card label {
+    font-weight: bold;
+    margin-right: 10px;
+    color: var(--forest);
+}
+
+.selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 15px 20px;
+    /*background: rgba(48, 64, 64, 0.8); /* полупрозрачный фон */
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    color: var(--mist);
+    text-align: center;
+}
+
+.selection-info {
+    font-size: 1.1em;
+    font-weight: 600;
+    background-color: #5b7065; 
+    padding: 8px 15px;
+    border-radius: 20px;
+    color: #f9fff8;
+    display: inline-block;
+    min-width: 120px;
+}
+
+.error-message {
+    color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.2);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+
+@media (max-width: 850px) {
+    .nav-links {
+        position: static;
+        transform: none;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    .title {
+        font-size: 2.1em;
+    }
+}
+
+@media (max-width: 550px) {
+    .card {
+        width: 90%;
+    }
+    .title {
+        font-size: 1.7em;
+    }
+}
 
 
 @media (max-width: 600px) {
